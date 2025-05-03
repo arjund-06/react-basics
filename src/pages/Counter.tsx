@@ -2,11 +2,22 @@ import { useState } from 'react';
 
 const Counter = () => {
   const [count, setCount] = useState(0);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(5);
 
   const increment = () => setCount(count + step);
   const decrement = () => setCount(count - step);
-  const reset = () => setCount(0);
+  // const reset = () => setCount(0);
+  const reset = (all: boolean = false) => {
+    console.log(`Resetting ${all}`)
+    setCount(0);
+    if (all)
+      setStep(1);
+    return;
+  }
+
+  const handleStepChange = (value: number) => {
+    setStep(value > 0 ? value : 1);
+  }
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -19,7 +30,7 @@ const Counter = () => {
         <input
           type="number"
           value={step}
-          onChange={(e) => setStep(Number(e.target.value))}
+          onChange={(e) => {console.log("Change"); handleStepChange(Number(e.target.value))}}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
@@ -36,7 +47,7 @@ const Counter = () => {
           Decrement
         </button>
         <button
-          onClick={reset}
+          onClick={() => reset()}
           className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
         >
           Reset
@@ -46,6 +57,13 @@ const Counter = () => {
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
         >
           Increment
+        </button>
+        <br />
+        <button
+          onClick={() => reset(true)}
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Reset All
         </button>
       </div>
 
