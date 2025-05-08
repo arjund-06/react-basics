@@ -16,7 +16,11 @@ const Counter = () => {
   }
 
   const handleStepChange = (value: number) => {
+    const test = {
+      [value]: "test"
+    }
     setStep(value > 0 ? value : 1);
+    console.log(test)
   }
 
   return (
