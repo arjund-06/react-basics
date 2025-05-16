@@ -46,7 +46,7 @@ const TodoList = () => {
           <input
             type="text"
             value={newTodo}
-            onChange={(e) => setNewTodo(e.target.value)}
+            onChange={(e) => {console.log("ChangeDetect"); setNewTodo(e.target.value)}}
             placeholder="Add a new todo..."
             className="flex-1 shadow appearance-none border rounded-l py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -59,6 +59,8 @@ const TodoList = () => {
         </div>
       </form>
 
+      {/* <p>Total {newTodo} Completed {(() => {console.log("Checking --"); return []}).length}</p> */}
+      <p>Total {todos.length} Completed {todos.filter((todo) => {console.log("Checking --"); return todo.completed}).length}</p>
       <ul className="space-y-2">
         {todos.map((todo) => (
           <li
