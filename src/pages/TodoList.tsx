@@ -6,35 +6,37 @@ interface Todo {
   completed: boolean;
 }
 
+interface TodoList {
+  [id: number]: Todo | undefined
+}
+
 const TodoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoList, setTodos] = useState<TodoList>({});
   const [newTodo, setNewTodo] = useState('');
 
   const addTodo = (e: React.FormEvent) => {
     e.preventDefault();
     if (newTodo.trim() === '') return;
 
-    setTodos([
-      ...todos,
-      {
-        id: Date.now(),
-        text: newTodo.trim(),
-        completed: false,
-      },
-    ]);
+    const newId: number = Date.now();
+    todoList[newId] = {
+      id: newId,
+      text: newTodo.trim(),
+      completed: false
+    }
+
+    setTodos(todoList);
     setNewTodo('');
   };
 
   const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+    todoList[id]!.completed = !todoList[id]!.completed;
+    setTodos(todoList);
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    todoList[id] = undefined;
+    setTodos(todoList);
   };
 
   return (
@@ -62,7 +64,7 @@ const TodoList = () => {
       {/* <p>Total {newTodo} Completed {(() => {console.log("Checking --"); return []}).length}</p> */}
       <p>Total {todos.length} Completed {todos.filter((todo) => {console.log("Checking --"); return todo.completed}).length}</p>
       <ul className="space-y-2">
-        {todos.map((todo) => (
+        {Object.values(todoList).map((todo) => (
           <li
             key={todo.id}
             className="flex items-center justify-between p-3 bg-gray-50 rounded"
@@ -92,7 +94,7 @@ const TodoList = () => {
         ))}
       </ul>
 
-      {todos.length === 0 && (
+      {Object.values(todoList).length === 0 && (
         <p className="text-center text-gray-500 mt-4">No todos yet. Add one!</p>
       )}
 
